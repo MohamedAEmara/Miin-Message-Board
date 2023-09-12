@@ -1,45 +1,7 @@
-// var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-// var cookieParser = require('cookie-parser');
-// var logger = require('morgan');
-
-// var indexRouter = require('./routes/index');
-// var usersRouter = require('./routes/users');
 
 var app = express();
-
-// // view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'jade');
-
-// app.use(logger('dev'));
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: false }));
-// app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, 'public')));
-
-// app.use('/', indexRouter);
-// app.use('/users', usersRouter);
-
-// // catch 404 and forward to error handler
-// app.use(function(req, res, next) {
-//   next(createError(404));
-// });
-
-// // error handler
-// app.use(function(err, req, res, next) {
-//   // set locals, only providing error in development
-//   res.locals.message = err.message;
-//   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-//   // render the error page
-//   res.status(err.status || 500);
-//   res.render('error');
-// });
-
-// module.exports = app;
-
 
 
 // const express = require('express');
@@ -76,29 +38,64 @@ app.get('/', (req, res) => {
 
     res.send(resss);
 
-    // msgs.forEach(msg => {
-    //     console.log(msg['text']);
-    //     res.send(msg['text']);
-    // })
-
-
-    // let ss = JSON.stringify(msgs);
-    // console.log(ss);
-    // console.log(ss["messages"].length);
-    // const entries = Object.entries(msgs);
-    // console
-    // .log(entries);
-    // console.log(entries[1]);
-    // // let len = 
-    // msgs.forEach((value) => {
-    //     // console.log(value[0].text);
-    //     // console.log(value[1].text);
-    //     console.log("Nothingggggggggggggggggg");
-    //     console.log(value['text']);
-    //     res.send(value['text']);
-    // })
 });
 
-app.listen(port, () => {
-    console.log('Example app listenning on port ' + port);
+
+// app.get('/messages', (res, req) => {
+//     console.log(res);
+//     res.render('index', {title: msgs[0]['text']});
+// })
+// app.listen(port, () => {
+//     console.log('Example app listenning on port ' + port);
+// })
+
+const bodyParser = require('body-parser'); // Import body-parser
+
+
+// Use body-parser middleware to parse form data
+app.use(bodyParser.urlencoded({ extended: false }));
+
+
+const pug = require('pug');
+const messages = require('./routes/messages');
+
+
+// Serve your .pug files from a "views" directory
+app.set('view engine', 'pug');
+app.set('views', __dirname + '/views');
+
+app.get('/messages', (req, res) => {
+    const people = msgs;
+    console.log(people);
+    console.log(people[0]['text']);
+    res.render('index.pug', {people});
 })
+
+
+
+app.get('/new', (req, res) => {
+    res.render('new.pug');
+});
+
+
+app.post('/new', (req, res) => {
+    const name = req.body.name;
+    const msg = req.body.message;
+
+    console.log('Name: ' + name);
+    console.log('Message: ' + msg);
+
+    msgs.push({"text": msg, "user": name, "added": Date.now()});
+    
+    // At the end of router.post() ,, we want to send the user back to 
+    // the messages page to see the added message.
+    res.redirect('/messages');
+    
+    res.send('Form Submitted Successfully!');
+});
+
+
+app.listen(port, () => {
+    console.log(`Server is listenning at http://localhost:${port}`);
+})
+

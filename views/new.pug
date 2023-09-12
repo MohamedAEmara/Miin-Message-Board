@@ -1,0 +1,16 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Document
+  body
+    h1 Insert a new Message
+    form(method="POST", action="/new")
+      label(for="name") Name
+      input(type="text", id="name", name="name")
+      h1
+      label(for="message") Message
+      textarea(name="message", id="message", cols="30", rows="3")
+      h1
+      button(type="submit") Add new Message

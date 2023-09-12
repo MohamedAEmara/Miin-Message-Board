@@ -14,5 +14,3 @@ messages.push({
 })
 
 module.exports = messages
-
-// export { messages };
